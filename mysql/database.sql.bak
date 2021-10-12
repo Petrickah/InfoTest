@@ -1,0 +1,244 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Jul 19, 2020 at 01:07 PM
+-- Server version: 10.4.10-MariaDB
+-- PHP Version: 7.3.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `infotest`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categorie_keyword`
+--
+
+DROP TABLE IF EXISTS `categorie_keyword`;
+CREATE TABLE IF NOT EXISTS `categorie_keyword` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `keyword_Keyword` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `categorie_Denumire` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Categorie_Keyword_Keywords_Keyword` (`keyword_Keyword`),
+  KEY `fk_Categorie_Keyword_Categorii_Denumire` (`categorie_Denumire`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categorii`
+--
+
+DROP TABLE IF EXISTS `categorii`;
+CREATE TABLE IF NOT EXISTS `categorii` (
+  `Denumire` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Descriere` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`Denumire`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comentarii`
+--
+
+DROP TABLE IF EXISTS `comentarii`;
+CREATE TABLE IF NOT EXISTS `comentarii` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Titlu` varchar(75) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Continut` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `Autor` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `comentarii_id_unique` (`id`),
+  UNIQUE KEY `comentarii_titlu_unique` (`Titlu`),
+  KEY `fk_Comentarii_Useri_Email` (`Autor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `keywords`
+--
+
+DROP TABLE IF EXISTS `keywords`;
+CREATE TABLE IF NOT EXISTS `keywords` (
+  `Keyword` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Postare` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`Keyword`),
+  KEY `fk_Keywords_Postari_Slug` (`Postare`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2019_12_15_101847_create_useri_table', 1),
+(2, '2019_12_15_153831_create_comentarii_table', 1),
+(3, '2019_12_15_191926_create_postari_table', 1),
+(4, '2019_12_15_192629_create_categorii_table', 1),
+(5, '2019_12_15_194112_create_keywords_table', 1),
+(6, '2019_12_15_194617_create_categorie_keyword_table', 1),
+(7, '2019_12_16_092410_add_foreign_keys_to_comentarii', 1),
+(8, '2019_12_16_092603_add_foreign_keys_to_postari', 1),
+(9, '2019_12_16_092825_add_foreign_keys_to_keywords', 1),
+(10, '2019_12_16_092914_add_foreign_keys_to_categorii_keywords', 1),
+(11, '2019_12_19_124147_create_roles_table', 1),
+(12, '2019_12_19_124625_create_role_user_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `postari`
+--
+
+DROP TABLE IF EXISTS `postari`;
+CREATE TABLE IF NOT EXISTS `postari` (
+  `slug` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Titlu` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Continut` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Autor` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Categorie` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`slug`),
+  KEY `fk_Postari_Useri_Email` (`Autor`),
+  KEY `fk_Postari_Categorii_Denumire` (`Categorie`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE IF NOT EXISTS `roles` (
+  `role` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descriere` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`role`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role_user`
+--
+
+DROP TABLE IF EXISTS `role_user`;
+CREATE TABLE IF NOT EXISTS `role_user` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `role_role` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_Email` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Role_User_Roles_role` (`role_role`),
+  KEY `fk_Role_User_Useri_Email` (`user_Email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setari`
+--
+
+DROP TABLE IF EXISTS `setari`;
+CREATE TABLE IF NOT EXISTS `setari` (
+  `Obtiune` varchar(50) COLLATE utf16_romanian_ci NOT NULL,
+  `Valoare` VARCHAR(250) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf16 COLLATE=utf16_romanian_ci;
+
+INSERT INTO `setari` VALUES ('current_theme', 'Snipp');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `useri`
+--
+
+DROP TABLE IF EXISTS `useri`;
+CREATE TABLE IF NOT EXISTS `useri` (
+  `Email` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Username` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Password` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Nume` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Prenume` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `auth_token` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`Email`),
+  UNIQUE KEY `useri_username_unique` (`Username`),
+  UNIQUE KEY `useri_auth_token_unique` (`auth_token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `categorie_keyword`
+--
+ALTER TABLE `categorie_keyword`
+  ADD CONSTRAINT `fk_Categorie_Keyword_Categorii_Denumire` FOREIGN KEY (`categorie_Denumire`) REFERENCES `categorii` (`Denumire`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_Categorie_Keyword_Keywords_Keyword` FOREIGN KEY (`keyword_Keyword`) REFERENCES `keywords` (`Keyword`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `comentarii`
+--
+ALTER TABLE `comentarii`
+  ADD CONSTRAINT `fk_Comentarii_Useri_Email` FOREIGN KEY (`Autor`) REFERENCES `useri` (`Email`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `keywords`
+--
+ALTER TABLE `keywords`
+  ADD CONSTRAINT `fk_Keywords_Postari_Slug` FOREIGN KEY (`Postare`) REFERENCES `postari` (`slug`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `postari`
+--
+ALTER TABLE `postari`
+  ADD CONSTRAINT `fk_Postari_Categorii_Denumire` FOREIGN KEY (`Categorie`) REFERENCES `categorii` (`Denumire`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_Postari_Useri_Email` FOREIGN KEY (`Autor`) REFERENCES `useri` (`Email`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `role_user`
+--
+ALTER TABLE `role_user`
+  ADD CONSTRAINT `fk_Role_User_Roles_role` FOREIGN KEY (`role_role`) REFERENCES `roles` (`role`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_Role_User_Useri_Email` FOREIGN KEY (`user_Email`) REFERENCES `useri` (`Email`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

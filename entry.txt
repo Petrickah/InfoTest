@@ -1,0 +1,4 @@
+USER petrickah
+PROBLEM suma
+DEFINE <solution> AS <user>_<problem>.c
+EVAL <solution> <problem>/stages.txt

@@ -1,0 +1,4 @@
+USER 769a10d3-2c6d-45f6-937a-7c6193af55d9
+PROBLEM suma
+DEFINE <solution> AS <user>_<problem>.c
+EVAL <solution> <problem>/stages.txt
